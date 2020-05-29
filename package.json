@@ -1,0 +1,23 @@
+{
+  "name": "examen_1_parcial",
+  "version": "1.0.0",
+  "description": "aplicación en consola con NodeJS que permita leer los datos de un archivo CSV y realizar una búsqueda específica.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KevinChangoluisa/Examen_1_parcial.git"
+  },
+  "author": "Kevin Changoluisa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KevinChangoluisa/Examen_1_parcial/issues"
+  },
+  "homepage": "https://github.com/KevinChangoluisa/Examen_1_parcial#readme",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "yargs": "^15.3.1"
+  }
+}
