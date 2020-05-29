@@ -1,11 +1,13 @@
 const argv = require('./config/yargs').argv;
+const tareas = require('./buscador/buscar');
 const colors = require('colors');
 let comando = argv._[0];
 
 
+
 switch (comando) {
     case 'mostrar':
-        let consulta = tareas.imprimir(argv.archivo, argv.anio, argv.pais);
+        let consulta = tareas.consulta(argv.archivo, argv.anio, argv.pais);
         break;
     case 'guardar':
         let guardar = tareas.guardar(argv.archivo, argv.anio, argv.pais);

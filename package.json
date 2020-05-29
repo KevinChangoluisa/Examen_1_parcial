@@ -18,6 +18,7 @@
   "homepage": "https://github.com/KevinChangoluisa/Examen_1_parcial#readme",
   "dependencies": {
     "colors": "^1.4.0",
+    "csvtojson": "^2.0.10",
     "yargs": "^15.3.1"
   }
 }
