@@ -62,10 +62,15 @@ async function consulta(archivo, anio, cod) {
             if (anio >= 1964 && anio <= 2019) {
                 getSuscrip(datos, cod, anio)
                     .then((suscriPais) => {
-                        console.log(`Pais:             ${pais}`);
-                        console.log(`Codigo pais:      ${cod}`);
-                        console.log(`Año:              ${anio}`);
-                        console.log(`Valor:            ${suscriPais}`);
+                        console.log("============================================================================".bgMagenta);
+                        console.log();
+                        console.log("   Datos:".blue + "        Personas que usan Internet( % de la población)".yellow);
+                        console.log("   Pais:".blue + `         ${pais}`.yellow);
+                        console.log("   Codigo pais:".blue + `  ${cod}`.yellow);
+                        console.log("   Año:".blue + `          ${anio}`.yellow);
+                        console.log("   Valor:".blue + `        ${suscriPais}`.yellow);
+                        console.log();
+                        console.log("============================================================================".bgMagenta);
 
                     })
             } else {
