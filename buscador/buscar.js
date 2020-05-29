@@ -4,7 +4,7 @@ const fs = require('fs')
 
 async function getData(archivo) {
     try {
-        const datos = await csv().fromFile(archivo);
+        const datos = await csv().fromFile(archivo, 'utf8');
         let data = []
         var codes = JSON.parse(fs.readFileSync('./buscador/ISO-3166-ALPHA-3.json', 'utf8'));
         for (let dat of datos) {
@@ -40,6 +40,16 @@ async function getSuscrip(pais, cod, anio) {
     }
 }
 
+async function getIndicadorName(pais, cod) {
+    for (var i = 0; i < pais.length; i++) {
+        let va = Object.values(pais[i]);
+        if (va[1] == cod) {
+            indi_name = va[2]
+            return indi_name
+        }
+    }
+}
+
 async function getPais(pais, cod) {
     for (var i = 0; i < pais.length; i++) {
         let va = Object.values(pais[i]);
@@ -50,28 +60,25 @@ async function getPais(pais, cod) {
     }
 }
 
-
-
 async function consulta(archivo, anio, cod) {
-    let informacion = [];
     let datos = await getData(archivo);
     if (datos != "Error 200") {
         let Country = await getCountry(datos, cod);
         if (Country == true) {
             let pais = await getPais(datos, cod);
-            if (anio >= 1964 && anio <= 2019) {
+            let iname = await getIndicadorName(datos, cod);
+            if (anio >= 1960 && anio <= 2019) {
                 getSuscrip(datos, cod, anio)
                     .then((suscriPais) => {
                         console.log("============================================================================".bgMagenta);
                         console.log();
-                        console.log("   Datos:".blue + "        Personas que usan Internet( % de la población)".yellow);
-                        console.log("   Pais:".blue + `         ${pais}`.yellow);
-                        console.log("   Codigo pais:".blue + `  ${cod}`.yellow);
+                        console.log("   Datos:".blue + `        ${iname}`.yellow);
+                        console.log("   País:".blue + `         ${pais}`.yellow);
+                        console.log("   Codigo país:".blue + `  ${cod}`.yellow);
                         console.log("   Año:".blue + `          ${anio}`.yellow);
                         console.log("   Valor:".blue + `        ${suscriPais}`.yellow);
                         console.log();
                         console.log("============================================================================".bgMagenta);
-
                     })
             } else {
                 console.log('\n     ' + `Al momento no existe registros para el año: ${anio} `.bgRed);
@@ -83,9 +90,34 @@ async function consulta(archivo, anio, cod) {
     } else {
         console.log(`\n `, `::::No existe el archivo ${archivo} !::::`.bgRed)
     }
-    return await informacion;
+}
+
+async function guardar(archivo, anio, cod) {
+    let datos = await getData(archivo);
+    if (datos != "Error 200") {
+        let Country = await getCountry(datos, cod);
+        if (Country == true) {
+            let pais = await getPais(datos, cod);
+            let iname = await getIndicadorName(datos, cod);
+            if (anio >= 1960 && anio <= 2019) {
+                getSuscrip(datos, cod, anio)
+                    .then((suscriPais) => {
+                        fs.writeFileSync(`./resultados/${cod}-${anio}.txt`, `Datos: ${iname}\nPais: ${pais}\nCod: ${cod}\nAnio: ${anio}\nValor: ${Number(suscriPais)}`);
+                        console.log(`Archivo guardado exitósamente: /resultados/${cod}-${anio}.txt`.bgGreen);
+                    })
+            } else {
+                console.log('\n     ' + `Al momento no existe registros para el año: ${anio} `.bgRed);
+            }
+        } else {
+            console.log('\n     ' + `No existe el codigo de pais: ${cod} en la base de datos. `.bgRed);
+        }
+
+    } else {
+        console.log(`\n `, `::::No existe el archivo ${archivo} !::::`.bgRed)
+    }
 }
 
 module.exports = {
-    consulta
+    consulta,
+    guardar
 }
